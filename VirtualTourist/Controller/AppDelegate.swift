@@ -14,7 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Data Controller Definition (CoreData)
     
-    let dataController = DataController(modelName: "VirtualTourist")
+    // no longer need this as changed to singleton
+//    let dataController = DataController(modelName: "VirtualTourist")
+    let dataController = DataController.getInstance()
     
     // MARK: - Run this when first time launched
     
@@ -51,7 +53,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // load the CoreData Stack Data Controller
         dataController.load()
         
+        // debugging help to see the CoreData Database SQLLite file
+        whereIsMySQLite()
+        
         return true
+    }
+    
+    func whereIsMySQLite() {
+        print("whereIsMySQLite")
+        let path = FileManager
+            .default
+            .urls(for: .applicationSupportDirectory, in: .userDomainMask)
+            .last?
+            .absoluteString
+            .replacingOccurrences(of: "file://", with: "")
+            .removingPercentEncoding
+
+        print(path ?? "Not found")
     }
 
     // MARK: UISceneSession Lifecycle
