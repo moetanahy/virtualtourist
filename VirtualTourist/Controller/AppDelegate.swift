@@ -19,18 +19,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Run this when first time launched
     
     func checkIfFirstLaunch() {
-        if UserDefaults.standard.bool(forKey: "HasLaunchedBefore") {
+        if UserDefaults.standard.bool(forKey: ProjectCustomKeys.hasLaunchedBefore.rawValue) {
             print("App has launched before")
         } else {
             print("This is the first launch ever!")
-            UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
+            UserDefaults.standard.set(true, forKey: ProjectCustomKeys.hasLaunchedBefore.rawValue)
             // Cairo Default is:
             // Latitude - 30.044420
             // Longitude - 31.235712
             let cairoLat = 30.044420
             let cairoLon = 31.235712
-            let defaultMapCenter = CLLocationCoordinate2DMake(cairoLat, cairoLon)
-            UserDefaults.standard.set(defaultMapCenter, forKey: Keys.mapDefaultKey.rawValue)
+            let defaultMapCenter = [
+                "lat": cairoLat,
+                "lon": cairoLon
+            ]
+            UserDefaults.standard.set(defaultMapCenter, forKey: ProjectCustomKeys.mapDefaultKey.rawValue)
             UserDefaults.standard.synchronize()
         }
     }
@@ -42,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // check if this is the first time the app launches
         // if so, load the location of Cairo, Egypt as the user defaults
         // this avoids me having to check user location and ask for privileges
+//        UserDefaults.standard.set(false, forKey: "HasLaunchedBefore")
         checkIfFirstLaunch()
         
         // load the CoreData Stack Data Controller

@@ -19,7 +19,7 @@
 		DD4F218E24532C4E00BB0CCD /* SearchPhotosResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F218D24532C4E00BB0CCD /* SearchPhotosResponse.swift */; };
 		DD4F21922453308100BB0CCD /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD4F21902453308100BB0CCD /* VirtualTourist.xcdatamodeld */; };
 		DD4F21942453385100BB0CCD /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F21932453385100BB0CCD /* DataController.swift */; };
-		DD4F219824534BAC00BB0CCD /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F219724534BAC00BB0CCD /* Keys.swift */; };
+		DD4F219A245354BD00BB0CCD /* ProjectCustomKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F2199245354BD00BB0CCD /* ProjectCustomKeys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +38,7 @@
 		DD4F21912453308100BB0CCD /* VirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTourist.xcdatamodel; sourceTree = "<group>"; };
 		DD4F21932453385100BB0CCD /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		DD4F21962453392400BB0CCD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		DD4F219724534BAC00BB0CCD /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		DD4F2199245354BD00BB0CCD /* ProjectCustomKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCustomKeys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +85,7 @@
 			children = (
 				DD4F218F2453306000BB0CCD /* CoreData */,
 				DD4F218424531C1F00BB0CCD /* Flickr */,
-				DD4F219724534BAC00BB0CCD /* Keys.swift */,
+				DD4F2199245354BD00BB0CCD /* ProjectCustomKeys.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -225,8 +225,8 @@
 				DD4F21922453308100BB0CCD /* VirtualTourist.xcdatamodeld in Sources */,
 				DD4F218E24532C4E00BB0CCD /* SearchPhotosResponse.swift in Sources */,
 				DD4F218624531C4700BB0CCD /* Client.swift in Sources */,
+				DD4F219A245354BD00BB0CCD /* ProjectCustomKeys.swift in Sources */,
 				DD4F217024531BC500BB0CCD /* SceneDelegate.swift in Sources */,
-				DD4F219824534BAC00BB0CCD /* Keys.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

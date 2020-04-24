@@ -28,5 +28,11 @@ I'll do it in two steps:
 * Using a Repostory Pattern which will accomodate for CoreData & Codable calls
 
 
+## Useful code references
+
+* https://medium.com/@calmone/ios-mapkit-in-swift-4-drop-the-pin-at-the-point-of-long-press-2bed878fdf93
+* 
+
+
 
 

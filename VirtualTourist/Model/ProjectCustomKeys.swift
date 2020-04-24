@@ -1,5 +1,5 @@
 //
-//  Keys.swift
+//  ProjectCustomKeys.swift
 //  VirtualTourist
 //
 //  Created by Moe El Tanahy on 24/04/2020.
@@ -8,8 +8,9 @@
 
 import Foundation
 
-enum Keys: String {
+enum ProjectCustomKeys: String {
     
     case mapDefaultKey = "DefaultMapCenter"
-       
+    case hasLaunchedBefore = "HasLaunchedBefore"
+    
 }

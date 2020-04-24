@@ -15,7 +15,7 @@ class MapViewController: UIViewController {
     
     // MARK: Variables
     
-    let mapDefaultKey = Keys.mapDefaultKey.rawValue
+    let mapDefaultKey = ProjectCustomKeys.mapDefaultKey.rawValue
     
     // MARK: Outlets
     
@@ -41,50 +41,67 @@ class MapViewController: UIViewController {
         // set the delegate
         mapView.delegate = self
         
+        // get the location of the map to display
+        let locationDict = UserDefaults.standard.value(forKey: mapDefaultKey) as! [String:Double]
         // Designate center point.
-        let center: CLLocationCoordinate2D = UserDefaults.standard.value(forKey: self.mapDefaultKey)
+        let center: CLLocationCoordinate2D = CLLocationCoordinate2DMake(locationDict["lat"]!, locationDict["lon"]!)
+        // Set center point in MapView.
+        mapView.setCenter(center, animated: true)
         
+        // Generate long-press UIGestureRecognizer.
+        let myLongPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer()
+        myLongPress.addTarget(self, action: #selector(recognizeLongPress(_:)))
+        
+        // Added UIGestureRecognizer to MapView.
+        mapView.addGestureRecognizer(myLongPress)
         
         
     }
     
-//    // A method called when long press is detected.
-//    // https://medium.com/@calmone/ios-mapkit-in-swift-4-drop-the-pin-at-the-point-of-long-press-2bed878fdf93
-//    @objc private func recognizeLongPress(_ sender: UILongPressGestureRecognizer) {
-//        // Do not generate pins many times during long press.
-//        if sender.state != UIGestureRecognizer.State.began {
-//            return
-//        }
-//
-//        // Get the coordinates of the point you pressed long.
-//        let location = sender.location(in: _mapView)
-//
-//        // Convert location to CLLocationCoordinate2D.
-//        let myCoordinate: CLLocationCoordinate2D = _mapView.convert(location, toCoordinateFrom: _mapView)
-//
-//        // Generate pins.
-//        let myPin: MKPointAnnotation = MKPointAnnotation()
-//
-//        // Set the coordinates.
-//        myPin.coordinate = myCoordinate
-//
-//        // Set the title.
-//        myPin.title = "title"
-//
-//        // Set subtitle.
-//        myPin.subtitle = "subtitle"
-//
-//        // Added pins to MapView.
-//        _mapView.addAnnotation(myPin)
-//    }
+    // A method called when long press is detected.
+    @objc private func recognizeLongPress(_ sender: UILongPressGestureRecognizer) {
+        // Do not generate pins many times during long press.
+        if sender.state != UIGestureRecognizer.State.began {
+            return
+        }
+
+        // Get the coordinates of the point you pressed long.
+        let location = sender.location(in: mapView)
+
+        // Convert location to CLLocationCoordinate2D.
+        let myCoordinate: CLLocationCoordinate2D = mapView.convert(location, toCoordinateFrom: mapView)
+
+        // Generate pins.
+        let myPin: MKPointAnnotation = MKPointAnnotation()
+
+        // Set the coordinates.
+        myPin.coordinate = myCoordinate
+
+        // Set the title.
+        myPin.title = "Lat(\(myCoordinate.latitude)) Lon(\(myCoordinate.longitude))"
+        //myPin.subtitle = "subtitle"
+
+        // Added pins to MapView.
+        mapView.addAnnotation(myPin)
+    }
 
 }
 
 // MARK: MapViewController:MKMapViewDelegate - Delegate class
 
 extension MapViewController: MKMapViewDelegate {
-    
         
+    // Tells the delegate that the region displayed by the map view just changed.
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated: Bool) {
+        debugPrint("mapView regionDidChangeAnimated called")
+        let center = mapView.centerCoordinate
+        
+        let newMapCenter = [
+            "lat": center.latitude,
+            "lon": center.longitude
+        ]
+        UserDefaults.standard.set(newMapCenter, forKey: ProjectCustomKeys.mapDefaultKey.rawValue)
+    }
     
 }
 
