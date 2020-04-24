@@ -21,6 +21,7 @@
 		DD4F21942453385100BB0CCD /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F21932453385100BB0CCD /* DataController.swift */; };
 		DD4F219A245354BD00BB0CCD /* ProjectCustomKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F2199245354BD00BB0CCD /* ProjectCustomKeys.swift */; };
 		DDFB44002453787B00A480F8 /* Pin+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB43FF2453787B00A480F8 /* Pin+Extensions.swift */; };
+		DDFB440224537B1600A480F8 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB440124537B1600A480F8 /* PhotoAlbumViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		DD4F21962453392400BB0CCD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DD4F2199245354BD00BB0CCD /* ProjectCustomKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCustomKeys.swift; sourceTree = "<group>"; };
 		DDFB43FF2453787B00A480F8 /* Pin+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+Extensions.swift"; sourceTree = "<group>"; };
+		DDFB440124537B1600A480F8 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 				DD4F216D24531BC500BB0CCD /* AppDelegate.swift */,
 				DD4F216F24531BC500BB0CCD /* SceneDelegate.swift */,
 				DD4F217124531BC500BB0CCD /* MapViewController.swift */,
+				DDFB440124537B1600A480F8 /* PhotoAlbumViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				DD4F218624531C4700BB0CCD /* Client.swift in Sources */,
 				DD4F219A245354BD00BB0CCD /* ProjectCustomKeys.swift in Sources */,
 				DD4F217024531BC500BB0CCD /* SceneDelegate.swift in Sources */,
+				DDFB440224537B1600A480F8 /* PhotoAlbumViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

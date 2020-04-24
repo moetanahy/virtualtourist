@@ -14,8 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Data Controller Definition (CoreData)
     
-    // no longer need this as changed to singleton
-//    let dataController = DataController(modelName: "VirtualTourist")
     let dataController = DataController.getInstance()
     
     // MARK: - Run this when first time launched
@@ -26,14 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             print("This is the first launch ever!")
             UserDefaults.standard.set(true, forKey: ProjectCustomKeys.hasLaunchedBefore.rawValue)
-            // Cairo Default is:
-            // Latitude - 30.044420
-            // Longitude - 31.235712
-            let cairoLat = 30.044420
-            let cairoLon = 31.235712
+            // Cairo Default is: Latitude - 30.044420 | Longitude - 31.235712
             let defaultMapCenter = [
-                "lat": cairoLat,
-                "lon": cairoLon
+                "lat": 30.044420,
+                "lon": 31.235712
             ]
             UserDefaults.standard.set(defaultMapCenter, forKey: ProjectCustomKeys.mapDefaultKey.rawValue)
             UserDefaults.standard.synchronize()

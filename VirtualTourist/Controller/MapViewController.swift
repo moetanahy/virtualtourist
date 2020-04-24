@@ -99,7 +99,7 @@ class MapViewController: UIViewController {
             // Here we create the annotation and set its coordiate, title, and subtitle properties
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-//            annotation.title = "\(first) \(last)"
+            annotation.title = "View Pics"
 //            annotation.subtitle = mediaURL
             
             // Finally we place the annotation in an array of annotations.
@@ -134,7 +134,7 @@ class MapViewController: UIViewController {
         myPin.coordinate = myCoordinate
 
         // Set the title.
-        myPin.title = "Lat(\(myCoordinate.latitude)) Lon(\(myCoordinate.longitude))"
+        myPin.title = "View Pics"
         //myPin.subtitle = "subtitle"
         
         // store to the Core Data
@@ -168,23 +168,66 @@ extension MapViewController: MKMapViewDelegate {
     
     // Delegate method called when addAnnotation is done.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let myPinIdentifier = "PinAnnotationIdentifier"
         
-        // Generate pins.
-        let myPinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: myPinIdentifier)
+        // VERSION 1
+//        let myPinIdentifier = "PinAnnotationIdentifier"
+//
+//        // Generate pins.
+//        let myPinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: myPinIdentifier)
+//
+//        // Add animation.
+//        myPinView.animatesDrop = true
+//
+//        // Display callouts.
+//        myPinView.canShowCallout = true
+//
+//        // Set annotation.
+//        myPinView.annotation = annotation
+//
+////        myPinView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+//
+//        print("latitude: \(annotation.coordinate.latitude), longitude: \(annotation.coordinate.longitude)")
         
-        // Add animation.
-        myPinView.animatesDrop = true
+//        return myPinView
         
-        // Display callouts.
-        myPinView.canShowCallout = false
+        let reuseId = "pin"
         
-        // Set annotation.
-        myPinView.annotation = annotation
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         
-        print("latitude: \(annotation.coordinate.latitude), longitude: \(annotation.coordinate.longitude)")
+
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.pinTintColor = .red
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        else {
+            pinView!.annotation = annotation
+        }
         
-        return myPinView
+        return pinView
+        
+        
+    }
+    
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView)
+    {
+        print("didSelectAnnotationView called!")
+//        if let annotationTitle = view.annotation?.title
+//        {
+//            print("User tapped on annotation with title: \(annotationTitle!)")
+//        }
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        print("calloutAccessoryControlTapped called!")
+//        let capital = view.annotation as! Capital
+//        let placeName = capital.title
+//        let placeInfo = capital.info
+//
+//        let ac = UIAlertController(title: placeName, message: placeInfo, preferredStyle: .alert)
+//        ac.addAction(UIAlertAction(title: "OK", style: .default))
+//        present(ac, animated: true)
     }
     
     
