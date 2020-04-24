@@ -20,6 +20,7 @@
 		DD4F21922453308100BB0CCD /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD4F21902453308100BB0CCD /* VirtualTourist.xcdatamodeld */; };
 		DD4F21942453385100BB0CCD /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F21932453385100BB0CCD /* DataController.swift */; };
 		DD4F219A245354BD00BB0CCD /* ProjectCustomKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F2199245354BD00BB0CCD /* ProjectCustomKeys.swift */; };
+		DDFB44002453787B00A480F8 /* Pin+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB43FF2453787B00A480F8 /* Pin+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		DD4F21932453385100BB0CCD /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		DD4F21962453392400BB0CCD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DD4F2199245354BD00BB0CCD /* ProjectCustomKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCustomKeys.swift; sourceTree = "<group>"; };
+		DDFB43FF2453787B00A480F8 /* Pin+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 		DD4F218124531BD300BB0CCD /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				DDFB43FE2453786600A480F8 /* Managed Object Extensions */,
 				DD4F218F2453306000BB0CCD /* CoreData */,
 				DD4F218424531C1F00BB0CCD /* Flickr */,
 				DD4F2199245354BD00BB0CCD /* ProjectCustomKeys.swift */,
@@ -144,6 +147,14 @@
 				DD4F21932453385100BB0CCD /* DataController.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		DDFB43FE2453786600A480F8 /* Managed Object Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				DDFB43FF2453787B00A480F8 /* Pin+Extensions.swift */,
+			);
+			path = "Managed Object Extensions";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -217,6 +228,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDFB44002453787B00A480F8 /* Pin+Extensions.swift in Sources */,
 				DD4F217224531BC500BB0CCD /* MapViewController.swift in Sources */,
 				DD4F218924531C7700BB0CCD /* FlickrClient.swift in Sources */,
 				DD4F216E24531BC500BB0CCD /* AppDelegate.swift in Sources */,

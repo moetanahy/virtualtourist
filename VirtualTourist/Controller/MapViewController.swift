@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 // MARK: - MapViewController:UIViewController - Main UI Class
 
@@ -16,6 +17,8 @@ class MapViewController: UIViewController {
     // MARK: - Variables
     
     let mapDefaultKey = ProjectCustomKeys.mapDefaultKey.rawValue
+    
+    var pins: [Pin] = []
     
     var dataController:DataController = DataController.getInstance()
     
@@ -30,6 +33,7 @@ class MapViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         setupMapView()
+        loadPins()
         
     }
     
@@ -59,6 +63,55 @@ class MapViewController: UIViewController {
         
     }
     
+    // MARK: - Loading Pins
+    private func loadPins() {
+        print("loadPins called")
+        // this is how we get the data
+        let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        if let result = try? dataController.viewContext.fetch(fetchRequest) {
+            pins = result
+            createAnnotations()
+        }
+        
+    }
+    
+    // very similar to what I used with OnTheMap
+    func createAnnotations() {
+        
+        var annotations = [MKPointAnnotation]()
+        
+        // The "locations" array is loaded with the sample data below. We are using the dictionaries
+        // to create map annotations. This would be more stylish if the dictionaries were being
+        // used to create custom structs. Perhaps StudentLocation structs.
+        
+        for location in self.pins {
+            
+            // Notice that the float values are being used to create CLLocationDegree values.
+            // This is a version of the Double type.
+            let lat = CLLocationDegrees(location.lat)
+            let long = CLLocationDegrees(location.lon)
+            
+            // The lat and long are used to create a CLLocationCoordinates2D instance.
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            
+            // Here we create the annotation and set its coordiate, title, and subtitle properties
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+//            annotation.title = "\(first) \(last)"
+//            annotation.subtitle = mediaURL
+            
+            // Finally we place the annotation in an array of annotations.
+            annotations.append(annotation)
+        }
+        
+        // When the array is complete, we add the annotations to the map.
+        self.mapView.addAnnotations(annotations)
+        
+    }
+    
+    
     // MARK: - Adding New Pins
     
     // A method called when long press is detected.
@@ -84,7 +137,7 @@ class MapViewController: UIViewController {
         myPin.title = "Lat(\(myCoordinate.latitude)) Lon(\(myCoordinate.longitude))"
         //myPin.subtitle = "subtitle"
         
-        // store to the core Data
+        // store to the Core Data
         let newPin = Pin(context: dataController.viewContext)
         newPin.lat = myCoordinate.latitude
         newPin.lon = myCoordinate.longitude
@@ -93,15 +146,6 @@ class MapViewController: UIViewController {
         // Added pins to MapView.
         mapView.addAnnotation(myPin)
     }
-    
-    /// Adds a new notebook to the end of the `notebooks` array
-//    func addPin(name: String) {
-//        let notebook = Notebook(context: dataController.viewContext)
-//        notebook.name = name
-//        notebook.creationDate = Date()
-//        try? dataController.viewContext.save()
-//    }
-    
     
 
 }

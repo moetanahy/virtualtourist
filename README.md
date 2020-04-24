@@ -25,6 +25,8 @@ The different flows need to consider:
 
 I'll do it in two steps:
 * The way I was taught in Udacity
+   * in the first trial of CoreData (which was using sequential statements to get the data and load it)
+   * Swap to using ResultsControllers and Observers to get this loading with less code overhead
 * Using a Repostory Pattern which will accomodate for CoreData & Codable calls
 
 

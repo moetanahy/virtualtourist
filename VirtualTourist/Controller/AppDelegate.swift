@@ -47,7 +47,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // check if this is the first time the app launches
         // if so, load the location of Cairo, Egypt as the user defaults
         // this avoids me having to check user location and ask for privileges
-//        UserDefaults.standard.set(false, forKey: "HasLaunchedBefore")
         checkIfFirstLaunch()
         
         // load the CoreData Stack Data Controller
@@ -59,6 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    // helps know the location of the SQLLite file to then be able to view in
+    // https://sqlitebrowser.org/dl/
+    // Found from https://stackoverflow.com/questions/10239634/how-can-i-check-what-is-stored-in-my-core-data-database
     func whereIsMySQLite() {
         print("whereIsMySQLite")
         let path = FileManager
