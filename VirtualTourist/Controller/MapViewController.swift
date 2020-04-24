@@ -103,5 +103,28 @@ extension MapViewController: MKMapViewDelegate {
         UserDefaults.standard.set(newMapCenter, forKey: ProjectCustomKeys.mapDefaultKey.rawValue)
     }
     
+    // Delegate method called when addAnnotation is done.
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let myPinIdentifier = "PinAnnotationIdentifier"
+        
+        // Generate pins.
+        let myPinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: myPinIdentifier)
+        
+        // Add animation.
+        myPinView.animatesDrop = true
+        
+        // Display callouts.
+        myPinView.canShowCallout = true
+        
+        // Set annotation.
+        myPinView.annotation = annotation
+        
+        print("latitude: \(annotation.coordinate.latitude), longitude: \(annotation.coordinate.longitude)")
+        
+        return myPinView
+    }
+    
+    
+    
 }
 
