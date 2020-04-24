@@ -7,14 +7,46 @@
 //
 
 import UIKit
+import MapKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    // MARK: - Data Controller Definition (CoreData)
+    
+    let dataController = DataController(modelName: "VirtualTourist")
+    
+    // MARK: - Run this when first time launched
+    
+    func checkIfFirstLaunch() {
+        if UserDefaults.standard.bool(forKey: "HasLaunchedBefore") {
+            print("App has launched before")
+        } else {
+            print("This is the first launch ever!")
+            UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
+            // Cairo Default is:
+            // Latitude - 30.044420
+            // Longitude - 31.235712
+            let cairoLat = 30.044420
+            let cairoLon = 31.235712
+            let defaultMapCenter = CLLocationCoordinate2DMake(cairoLat, cairoLon)
+            UserDefaults.standard.set(defaultMapCenter, forKey: Keys.mapDefaultKey.rawValue)
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // check if this is the first time the app launches
+        // if so, load the location of Cairo, Egypt as the user defaults
+        // this avoids me having to check user location and ask for privileges
+        checkIfFirstLaunch()
+        
+        // load the CoreData Stack Data Controller
+        dataController.load()
+        
         return true
     }
 

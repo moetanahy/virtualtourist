@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		DD4F216E24531BC500BB0CCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F216D24531BC500BB0CCD /* AppDelegate.swift */; };
 		DD4F217024531BC500BB0CCD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F216F24531BC500BB0CCD /* SceneDelegate.swift */; };
-		DD4F217224531BC500BB0CCD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F217124531BC500BB0CCD /* ViewController.swift */; };
+		DD4F217224531BC500BB0CCD /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F217124531BC500BB0CCD /* MapViewController.swift */; };
 		DD4F217524531BC500BB0CCD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD4F217324531BC500BB0CCD /* Main.storyboard */; };
 		DD4F217724531BC700BB0CCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD4F217624531BC700BB0CCD /* Assets.xcassets */; };
 		DD4F217A24531BC700BB0CCD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD4F217824531BC700BB0CCD /* LaunchScreen.storyboard */; };
@@ -18,13 +18,15 @@
 		DD4F218C24532A4900BB0CCD /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F218B24532A4900BB0CCD /* ErrorResponse.swift */; };
 		DD4F218E24532C4E00BB0CCD /* SearchPhotosResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F218D24532C4E00BB0CCD /* SearchPhotosResponse.swift */; };
 		DD4F21922453308100BB0CCD /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD4F21902453308100BB0CCD /* VirtualTourist.xcdatamodeld */; };
+		DD4F21942453385100BB0CCD /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F21932453385100BB0CCD /* DataController.swift */; };
+		DD4F219824534BAC00BB0CCD /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F219724534BAC00BB0CCD /* Keys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DD4F216A24531BC500BB0CCD /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD4F216D24531BC500BB0CCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD4F216F24531BC500BB0CCD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DD4F217124531BC500BB0CCD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DD4F217124531BC500BB0CCD /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		DD4F217424531BC500BB0CCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DD4F217624531BC700BB0CCD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DD4F217924531BC700BB0CCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -34,6 +36,9 @@
 		DD4F218B24532A4900BB0CCD /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 		DD4F218D24532C4E00BB0CCD /* SearchPhotosResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPhotosResponse.swift; sourceTree = "<group>"; };
 		DD4F21912453308100BB0CCD /* VirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTourist.xcdatamodel; sourceTree = "<group>"; };
+		DD4F21932453385100BB0CCD /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		DD4F21962453392400BB0CCD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		DD4F219724534BAC00BB0CCD /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +57,7 @@
 			children = (
 				DD4F216C24531BC500BB0CCD /* VirtualTourist */,
 				DD4F216B24531BC500BB0CCD /* Products */,
+				DD4F21962453392400BB0CCD /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,6 +85,7 @@
 			children = (
 				DD4F218F2453306000BB0CCD /* CoreData */,
 				DD4F218424531C1F00BB0CCD /* Flickr */,
+				DD4F219724534BAC00BB0CCD /* Keys.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -88,7 +95,7 @@
 			children = (
 				DD4F216D24531BC500BB0CCD /* AppDelegate.swift */,
 				DD4F216F24531BC500BB0CCD /* SceneDelegate.swift */,
-				DD4F217124531BC500BB0CCD /* ViewController.swift */,
+				DD4F217124531BC500BB0CCD /* MapViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -134,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				DD4F21902453308100BB0CCD /* VirtualTourist.xcdatamodeld */,
+				DD4F21932453385100BB0CCD /* DataController.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -209,14 +217,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD4F217224531BC500BB0CCD /* ViewController.swift in Sources */,
+				DD4F217224531BC500BB0CCD /* MapViewController.swift in Sources */,
 				DD4F218924531C7700BB0CCD /* FlickrClient.swift in Sources */,
 				DD4F216E24531BC500BB0CCD /* AppDelegate.swift in Sources */,
 				DD4F218C24532A4900BB0CCD /* ErrorResponse.swift in Sources */,
+				DD4F21942453385100BB0CCD /* DataController.swift in Sources */,
 				DD4F21922453308100BB0CCD /* VirtualTourist.xcdatamodeld in Sources */,
 				DD4F218E24532C4E00BB0CCD /* SearchPhotosResponse.swift in Sources */,
 				DD4F218624531C4700BB0CCD /* Client.swift in Sources */,
 				DD4F217024531BC500BB0CCD /* SceneDelegate.swift in Sources */,
+				DD4F219824534BAC00BB0CCD /* Keys.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
