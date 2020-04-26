@@ -61,7 +61,7 @@ class PhotoAlbumViewController: UIViewController {
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pin-\(pin.creationDate)-photos")
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pin-\(pin.creationDate!)-photos")
         fetchedResultsController.delegate = self
 
         do {
@@ -180,22 +180,29 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
         let aPhoto = fetchedResultsController.object(at: indexPath)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionCell", for: indexPath) as! PhotoCollectionViewCell
         
-        // Configure cell
-        if let photoData = aPhoto.data {
-            cell.imageView.image = UIImage(data: photoData)
+        // we have two scenarios
+        // 1. The binary image which this image uses has already been downloaded
+        // 2. It hasn't been downloaded yet, so this is a chance to download it
+        
+        if let photoBinaryImage = aPhoto.image {
+            cell.imageView.image = UIImage(data: photoBinaryImage)
+            
         } else if let photoURL = aPhoto.url {
             guard let url = URL(string: photoURL) else {
-                print("no!")
+                print("collectionView - url could not be converted for some reason")
                 return cell
             }
-            cell.imageView.kf.setImage(with: url, placeholder: UIImage(named: "Placeholder"), options: nil, progressBlock: nil) { (img, err, cacheType, url) in
-                if ((err) != nil) {
-                    
-                } else {
-                    aPhoto.data = img?.pngData()
-                    try? self.dataController.viewContext.save()
-                }
-            }
+            cell.imageView.image = UIImage(named: "ImagePlaceholder")
+            // need to download something here
+            
+//            cell.imageView.image.setImage(with: url, placeholder: UIImage(named: "ImagePlaceholder"), options: nil, progressBlock: nil) { (img, err, cacheType, url) in
+//                if ((err) != nil) {
+//
+//                } else {
+//                    aPhoto.data = img?.pngData()
+//                    try? self.dataController.viewContext.save()
+//                }
+//            }
         }
         
         return cell

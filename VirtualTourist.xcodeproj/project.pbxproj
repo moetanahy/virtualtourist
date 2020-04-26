@@ -129,12 +129,12 @@
 		DD4F218224531BDC00BB0CCD /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				DDFB442324557D2400A480F8 /* PhotoCollectionViewCell.swift */,
 				DD4F216D24531BC500BB0CCD /* AppDelegate.swift */,
 				DD4F216F24531BC500BB0CCD /* SceneDelegate.swift */,
 				DD4F217124531BC500BB0CCD /* MapViewController.swift */,
 				DDFB440124537B1600A480F8 /* PhotoAlbumViewController.swift */,
 				DDFB4409245545EE00A480F8 /* UIViewController+Extensions.swift */,
-				DDFB442324557D2400A480F8 /* PhotoCollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
