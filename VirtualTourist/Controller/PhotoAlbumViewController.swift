@@ -27,9 +27,7 @@ class PhotoAlbumViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupMapView()
-        
     }
     
     fileprivate func setupMapView() {
