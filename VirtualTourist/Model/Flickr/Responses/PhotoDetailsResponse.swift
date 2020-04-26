@@ -10,15 +10,26 @@ import Foundation
 
 // Working with Codable
 // and restructing the data = https://matteomanferdini.com/codable/
-struct PhotoDetailsResponse: Decodable {
+struct PhotoDetailsResponse {
     
     var id: String
     var latitude: String
     var longitude: String
     var url: URL
     
-    enum CodingKeys: String, CodingKey {
+    init(id: String, latitude: String, longitude: String, url: URL) {
+        self.id = id
+        self.latitude = latitude
+        self.longitude = longitude
+        self.url = url
+    }
     
+}
+
+extension PhotoDetailsResponse: Decodable {
+    
+    enum CodingKeys: String, CodingKey {
+        
         case photo
         
         enum PhotoKeys: String, CodingKey {
@@ -34,23 +45,24 @@ struct PhotoDetailsResponse: Decodable {
             
             enum UrlsKeys: String, CodingKey {
                 case url
-                enum UrlKeys: String, CodingKey {
-                    case url = "_content"
-                }
-                
             }
             
         }
         
     }
     
-    init(id: String, latitude: String, longitude: String, url: URL) {
-        self.id = id
-        self.latitude = latitude
-        self.longitude = longitude
-        self.url = url
+    struct PhotoResponseURL: Decodable {
+        
+        let type: String
+        let urlString: String
+        
+        enum CodingKeys: String, CodingKey {
+            case type = "type"
+            case urlString = "_content"
+        }
+        
     }
-    
+        
     // manually overwrote the decoder for this
     init(from decoder: Decoder) throws {
         
@@ -68,10 +80,39 @@ struct PhotoDetailsResponse: Decodable {
         
         // url info on the image
         let urlsContainer = try photoContainer.nestedContainer(keyedBy: CodingKeys.PhotoKeys.UrlsKeys.self, forKey: .urls)
-        let urlContainer = try urlsContainer.nestedContainer(keyedBy: CodingKeys.PhotoKeys.UrlsKeys.UrlKeys.self, forKey: .url)
-        url = try urlContainer.decode(URL.self, forKey: .url)
+        // decode the hard one which is very deep in the JSON file
+        let urls = try urlsContainer.decode([PhotoResponseURL].self, forKey: .url)
+        self.url = !urls.isEmpty
+            ? URL(string: urls.dropFirst().reduce("\(urls[0].urlString)", { $0 + ", \($1.urlString)" }))!
+            : URL(string: "")!
         
         
+//        let payloads = try secondStageContainer.decode([Payload].self, forKey: .payloads)
+//        self.payloads = !payloads.isEmpty
+//            ? payloads.dropFirst().reduce("\(payloads[0].name)", { $0 + ", \($1.name)" })
+//            : ""
+        
+        
+        
+//        let urlContainer = try urlsContainer.nestedContainer(keyedBy: CodingKeys.PhotoKeys.UrlsKeys.UrlKeys.self, forKey: .url)
+        //        url = try urlContainer.decode(URL.self, forKey: .url)
+        
+//        url = URL(string: "www.google.com")!
+        
+        
+    }
+}
+
+// Used for testing to check equality
+// https://developer.apple.com/documentation/swift/equatable
+extension PhotoDetailsResponse: Equatable {
+    
+    static func == (lhs: PhotoDetailsResponse, rhs: PhotoDetailsResponse) -> Bool {
+        return
+            lhs.id == rhs.id &&
+                lhs.latitude == rhs.latitude &&
+                lhs.longitude == rhs.longitude &&
+                lhs.url == rhs.url
     }
     
 }

@@ -33,7 +33,10 @@ class FlickrClient: Client {
                 // Docs - https://www.flickr.com/services/api/flickr.photos.getInfo.html
                 // API Explorer - https://www.flickr.com/services/api/explore/flickr.photos.getInfo
                 // URL Example - https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=0f3eb8495ce8927e7269312105ccba09&photo_id=49810994811&format=json&nojsoncallback=1
-                return Endpoints.base + "?method=flickr.photos.getInfo" + Endpoints.apiKeyParam + "&photo_id=\(photoId)" + "&format=json&nojsoncallback=1"
+                let toReturn = Endpoints.base + "?method=flickr.photos.getInfo" + Endpoints.apiKeyParam + "&photo_id=\(photoId)" + "&format=json&nojsoncallback=1"
+                print("Calling for photo")
+                print(toReturn)
+                return toReturn
             case .searchPhotos(let lat, let lon):
                 // search for photos given a specific lat and long
                 // Docs - https://www.flickr.com/services/api/flickr.photos.search.htm
@@ -58,7 +61,7 @@ class FlickrClient: Client {
             // do something here
             if let response = response {
                 print("searchPhotos - retrieved valid response")
-                print(response)
+//                print(response)
                 
                 var firstPhoto = response.photos.photo[0]
                 print("Called to get photo details for \(firstPhoto.id)")
@@ -72,6 +75,7 @@ class FlickrClient: Client {
                 completion(response.photos.photo.count, response, nil)
             } else {
                 print("searchPhotos - response errored out")
+                print(error)
                 // we need to figure out how we want to handle this
                 completion(0, nil, error)
             }
@@ -88,6 +92,7 @@ class FlickrClient: Client {
                 completion(response, nil)
             } else {
                 print("getPhotoInfo - has no response")
+                print(error)
                 completion(nil, error)
             }
         }       

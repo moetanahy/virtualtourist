@@ -30,6 +30,19 @@ I'll do it in two steps:
 * Use Codable for the DTO for PhotoResponse, then modify to have same object for both Photo and PhotoResponse 
 * Using a Repostory Pattern which will accomodate for CoreData & Codable calls
 
+## Flickr API
+
+Had a lot of back and forth to find the right URL.
+
+Just discovered this one which is critical - allows downloading the Image
+
+https://www.flickr.com/services/api/misc.urls.html
+
+The previous API I was using was wrong (flickr.photos.getInfo) is overkill and gets too much information, we don't need this.  with the information returned from the JSON in flickr.photos.search we can construct the JPEG url.
+
+
+
+
 ## Useful tools and docs
 
 ### Check Database

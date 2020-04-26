@@ -75,6 +75,8 @@ class Client: ClientProtocol {
                 }
                 return
             }
+            print("Response from get being printed")
+            print(data.debugDescription)
             let decoder = JSONDecoder()
             do {
                 let responseObject = try decoder.decode(ResponseType.self, from: data)
@@ -84,6 +86,7 @@ class Client: ClientProtocol {
                 }
             } catch {
                 print("taskForGETRequest - failed in decoding try")
+                print(error)
                 do {
                     let errorResponse = try decoder.decode(ErrorResponse.self, from: data) as Error
                     print("taskForGETRequest - error response being returned")

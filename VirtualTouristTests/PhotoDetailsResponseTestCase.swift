@@ -136,7 +136,7 @@ class PhotoDetailsResponseTestCase: XCTestCase {
     
     func testDecodePhotoDetailsResponseSuccess() {
         
-        XCTAssertEquals(decodedPhoto, try JSONDecoder().decode(PhotoDetailsResponse.self, from: getPhotoDetailsJSONResponse))
+        XCTAssertEqual(decodedPhoto, try JSONDecoder().decode(PhotoDetailsResponse.self, from: getPhotoDetailsJSONResponse))
         
     }
 
