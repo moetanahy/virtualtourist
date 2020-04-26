@@ -33,6 +33,12 @@ struct SearchPhotoResponse: Codable {
         let isfriend: Int
         let isfamily: Int
         
+        // Read - https://www.flickr.com/services/api/misc.urls.html
+        var generatedFileUrl: String {
+            // structure is https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
+            return "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret).jpg"
+        }
+        
     }
     
 }

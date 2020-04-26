@@ -81,21 +81,42 @@
                                 <rect key="frame" x="10" y="265" width="414" height="546"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="vbL-hN-0Gn">
-                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="itemSize" width="126" height="126"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="CWG-xS-03c">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="PhotoCollectionCell" reuseIdentifier="PhotoCollectionCell" id="CWG-xS-03c" customClass="PhotoCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="126" height="126"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="1rH-YH-HDT">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="1rH-YH-HDT" customClass="PhotoCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="126" height="126"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cq7-wP-fWw">
+                                                    <rect key="frame" x="0.5" y="-2" width="125" height="125"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="125" id="k3x-Um-GbC"/>
+                                                        <constraint firstAttribute="width" constant="125" id="wCY-eQ-ov3"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Cq7-wP-fWw" firstAttribute="centerX" secondItem="1rH-YH-HDT" secondAttribute="centerX" id="ElA-0e-hEW"/>
+                                                <constraint firstItem="Cq7-wP-fWw" firstAttribute="top" secondItem="1rH-YH-HDT" secondAttribute="top" constant="-2" id="Ued-AN-ZMe"/>
+                                            </constraints>
                                         </collectionViewCellContentView>
+                                        <size key="customSize" width="126" height="126"/>
+                                        <connections>
+                                            <outlet property="imageView" destination="Cq7-wP-fWw" id="poN-xr-nDE"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="DTd-eS-UpB" id="dkE-sY-lPa"/>
+                                    <outlet property="delegate" destination="DTd-eS-UpB" id="cwT-SP-efB"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -115,7 +136,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="jPD-Ne-bxD"/>
                     <connections>
+                        <outlet property="collectionView" destination="JNu-uW-b0y" id="tyN-f9-DDO"/>
                         <outlet property="mapView" destination="rgu-oh-UP4" id="8eD-kw-SZp"/>
+                        <outlet property="newCollectionButton" destination="edo-IE-Xa6" id="Vf2-Z6-EmV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B67-rX-dlp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

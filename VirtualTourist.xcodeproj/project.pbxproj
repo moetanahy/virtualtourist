@@ -26,6 +26,7 @@
 		DDFB440A245545EE00A480F8 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB4409245545EE00A480F8 /* UIViewController+Extensions.swift */; };
 		DDFB441C24555ECD00A480F8 /* PhotoDetailsResponseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB440B24555DA400A480F8 /* PhotoDetailsResponseTestCase.swift */; };
 		DDFB441F2455612200A480F8 /* VirtualTouristTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB441424555EC100A480F8 /* VirtualTouristTests.swift */; };
+		DDFB442424557D2400A480F8 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB442324557D2400A480F8 /* PhotoCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		DDFB441224555EC100A480F8 /* VirtualTouristTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualTouristTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDFB441424555EC100A480F8 /* VirtualTouristTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualTouristTests.swift; sourceTree = "<group>"; };
 		DDFB441624555EC100A480F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDFB442324557D2400A480F8 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 				DD4F217124531BC500BB0CCD /* MapViewController.swift */,
 				DDFB440124537B1600A480F8 /* PhotoAlbumViewController.swift */,
 				DDFB4409245545EE00A480F8 /* UIViewController+Extensions.swift */,
+				DDFB442324557D2400A480F8 /* PhotoCollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 		DD4F218324531BE800BB0CCD /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DDF976DF2455CF6D005F5C07 /* Cells */,
 				DD4F217324531BC500BB0CCD /* Main.storyboard */,
 				DD4F217624531BC700BB0CCD /* Assets.xcassets */,
 				DD4F217824531BC700BB0CCD /* LaunchScreen.storyboard */,
@@ -181,6 +185,13 @@
 				DD4F21932453385100BB0CCD /* DataController.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		DDF976DF2455CF6D005F5C07 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		DDFB43FE2453786600A480F8 /* Managed Object Extensions */ = {
@@ -313,6 +324,7 @@
 				DD4F218E24532C4E00BB0CCD /* SearchPhotosResponse.swift in Sources */,
 				DD4F218624531C4700BB0CCD /* Client.swift in Sources */,
 				DDFB440A245545EE00A480F8 /* UIViewController+Extensions.swift in Sources */,
+				DDFB442424557D2400A480F8 /* PhotoCollectionViewCell.swift in Sources */,
 				DD4F219A245354BD00BB0CCD /* ProjectCustomKeys.swift in Sources */,
 				DD4F217024531BC500BB0CCD /* SceneDelegate.swift in Sources */,
 				DDFB440224537B1600A480F8 /* PhotoAlbumViewController.swift in Sources */,

@@ -55,34 +55,41 @@ class FlickrClient: Client {
     // MARK: - API Calls & Requests
     
     // search photos on Flickr for a given PIN Latitude and Longitude
-    class func searchPhotos(pin: Pin, completion: @escaping (Int, SearchPhotoResponse?, Error?) -> Void) {
+    class func searchAndSavePhotos(pin: Pin, completion: @escaping (Bool?, Error?) -> Void) {
         
         taskForGETRequest(url: Endpoints.searchPhotos(pin.lat, pin.lon).url, responseType: SearchPhotoResponse.self) { (response, error) in
             // do something here
             if let response = response {
+                var hasAtLeastOneImage = false
                 print("searchPhotos - retrieved valid response")
-//                print(response)
-                
-                var firstPhoto = response.photos.photo[0]
-                print("Called to get photo details for \(firstPhoto.id)")
-                FlickrClient.getPhotoInfo(photoId: firstPhoto.id) { (response, error) in
-                    // do something here
-                    print("Found image")
-                    print(response.debugDescription)
+                let dataController = DataController.getInstance()
+                // for each photo, create a new field and save to pin
+                for photoDTO in response.photos.photo {
+                    // convert from PhotoItemResponse to Photo (DataStore)
+                    // TODO: Find a way to make this the same object (no DTO and Object separate)
+                    let photo = Photo(context: dataController.viewContext)
+                    photo.id = photoDTO.id
+                    photo.creationDate = Date()
+                    photo.url = photoDTO.generatedFileUrl
+                    photo.pin = pin
+                    hasAtLeastOneImage = true
                 }
+                // save them all in one go
+                try? dataController.viewContext.save()
                 
                 // search photos retrieved - keep in mind Photo information is not full
-                completion(response.photos.photo.count, response, nil)
+                completion(hasAtLeastOneImage, nil)
             } else {
                 print("searchPhotos - response errored out")
                 print(error)
                 // we need to figure out how we want to handle this
-                completion(0, nil, error)
+                completion(nil, error)
             }
         }
     }
     
     // gets a single photo
+    // TODO: Not complete, discovered this was not required - can use another method to download photos
     class func getPhotoInfo(photoId: String, completion: @escaping (PhotoDetailsResponse?, Error?) -> Void) {
         print("getPhotoInfo called")
         taskForGETRequest(url: Endpoints.getPhotoInfo(photoId).url, responseType: PhotoDetailsResponse.self) { (response, error) in

@@ -84,21 +84,7 @@ extension PhotoDetailsResponse: Decodable {
         let urls = try urlsContainer.decode([PhotoResponseURL].self, forKey: .url)
         self.url = !urls.isEmpty
             ? URL(string: urls.dropFirst().reduce("\(urls[0].urlString)", { $0 + ", \($1.urlString)" }))!
-            : URL(string: "")!
-        
-        
-//        let payloads = try secondStageContainer.decode([Payload].self, forKey: .payloads)
-//        self.payloads = !payloads.isEmpty
-//            ? payloads.dropFirst().reduce("\(payloads[0].name)", { $0 + ", \($1.name)" })
-//            : ""
-        
-        
-        
-//        let urlContainer = try urlsContainer.nestedContainer(keyedBy: CodingKeys.PhotoKeys.UrlsKeys.UrlKeys.self, forKey: .url)
-        //        url = try urlContainer.decode(URL.self, forKey: .url)
-        
-//        url = URL(string: "www.google.com")!
-        
+            : URL(string: "")!        
         
     }
 }
