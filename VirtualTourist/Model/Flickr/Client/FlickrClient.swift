@@ -51,29 +51,47 @@ class FlickrClient: Client {
     
     // MARK: - API Calls & Requests
     
-    // search photos on Flickr for a given Latitude and Longitude
-    class func searchPhotos(lat: Double, lon: Double, completion: @escaping (SearchPhotoResponse, Error?) -> Void) {
+    // search photos on Flickr for a given PIN Latitude and Longitude
+    class func searchPhotos(pin: Pin, completion: @escaping (Int, SearchPhotoResponse?, Error?) -> Void) {
         
-        taskForGETRequest(url: Endpoints.searchPhotos(lat, lon).url, responseType: SearchPhotoResponse.self) { (response, error) in
+        taskForGETRequest(url: Endpoints.searchPhotos(pin.lat, pin.lon).url, responseType: SearchPhotoResponse.self) { (response, error) in
             // do something here
             if let response = response {
                 print("searchPhotos - retrieved valid response")
+                print(response)
+                
+                var firstPhoto = response.photos.photo[0]
+                print("Called to get photo details for \(firstPhoto.id)")
+                FlickrClient.getPhotoInfo(photoId: firstPhoto.id) { (response, error) in
+                    // do something here
+                    print("Found image")
+                    print(response.debugDescription)
+                }
+                
                 // search photos retrieved - keep in mind Photo information is not full
-//                completion(response.results, nil)
+                completion(response.photos.photo.count, response, nil)
             } else {
                 print("searchPhotos - response errored out")
                 // we need to figure out how we want to handle this
-//                completion(nil, error)
+                completion(0, nil, error)
             }
         }
     }
     
-    class func getPhotoInfo(photoId: String, completion: @escaping (Photo, Error?) -> Void) {
-        
-        
-        
+    // gets a single photo
+    class func getPhotoInfo(photoId: String, completion: @escaping (PhotoDetailsResponse?, Error?) -> Void) {
+        print("getPhotoInfo called")
+        taskForGETRequest(url: Endpoints.getPhotoInfo(photoId).url, responseType: PhotoDetailsResponse.self) { (response, error) in
+            print("getPhotoInfo: returned from get request")
+            if let response = response {
+                print("getPhotoInfo - has response")
+                completion(response, nil)
+            } else {
+                print("getPhotoInfo - has no response")
+                completion(nil, error)
+            }
+        }       
     }
-    
     
     
 }

@@ -28,6 +28,7 @@ class PhotoAlbumViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMapView()
+        setupDataCollection()
     }
     
     fileprivate func setupMapView() {
@@ -40,6 +41,50 @@ class PhotoAlbumViewController: UIViewController {
         // Set center point in MapView.
         mapView.setCenter(center, animated: true)
         self.mapView.addAnnotation(pin)
+        
+    }
+    
+    fileprivate func setupDataCollection() {
+        
+        print("setupDataCollection")
+        
+        // Different Scenarios
+        // 1. Pin has locations
+        // 2. Pin has No Locations and API returns new data
+        // 3. Pin has No Locations and API returns NO data
+        
+        print (pin.photos!.count)
+        if pin.photos!.count == 0 {
+            // load what's in the pin collection
+            print("No Pin Photos - load from API")
+            FlickrClient.searchPhotos(pin: pin, completion: self.handlePhotoResults(count: searchPhotoResponse: error:))
+        } else {
+            // have some pins
+            // load from the API
+            
+        }
+        
+    }
+    
+    func handlePhotoResults(count: Int, searchPhotoResponse: SearchPhotoResponse?, error: Error?) {
+        print("handlePhotoResults")
+        print("Count of \(count)")
+        // do something here
+        guard let searchPhotoResponse = searchPhotoResponse else {
+            // there is an error here
+            // was unable to load photos
+            print("had some form of issue")
+            self.displayNoPhotosFound()
+            showAlert(message: error?.localizedDescription ?? "")
+            return
+        }
+        
+//        searchPhotoResponse.decide
+        
+        
+    }
+    
+    func displayNoPhotosFound() {
         
     }
     

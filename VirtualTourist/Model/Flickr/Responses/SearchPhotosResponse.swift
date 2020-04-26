@@ -18,10 +18,10 @@ struct SearchPhotoResponse: Codable {
         let pages: Int
         let perpage: Int
         let total: String
-        let photo: [PhotoItem]
+        let photo: [PhotoItemResponse]
     }
     
-    struct PhotoItem: Codable {
+    struct PhotoItemResponse: Codable {
         
         let id: String
         let owner: String
