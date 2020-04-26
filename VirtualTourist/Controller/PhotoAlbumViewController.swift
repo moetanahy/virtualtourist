@@ -20,6 +20,9 @@ class PhotoAlbumViewController: UIViewController {
     var fetchedResultsController:NSFetchedResultsController<Photo>!
     var pin: Pin!
     
+    private let itemsPerRow: CGFloat = 2
+    private let insets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+    
     // MARK: Outlets
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIButton!
@@ -192,8 +195,22 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
                 print("collectionView - url could not be converted for some reason")
                 return cell
             }
+            // set the placeholder image until I get the real data
             cell.imageView.image = UIImage(named: "ImagePlaceholder")
             // need to download something here
+            FlickrClient.getFileData(from: url) { (data, urlResponse, error) in
+                // set the image in the object
+                guard let data = data else {
+                    print("no data returned for file")
+                    return
+                }
+                aPhoto.image = data
+                cell.imageView.image = UIImage(data: data)
+                try? self.dataController.viewContext.save()
+            }
+            
+//            getFileData
+            
             
 //            cell.imageView.image.setImage(with: url, placeholder: UIImage(named: "ImagePlaceholder"), options: nil, progressBlock: nil) { (img, err, cacheType, url) in
 //                if ((err) != nil) {
@@ -214,4 +231,29 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
         
     }
     
+}
+
+extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let padding = insets.right * (itemsPerRow + 1)
+        let availableWidth = view.frame.width - padding
+        let widthOfItem = availableWidth / itemsPerRow
+        
+        return CGSize(width: widthOfItem, height: widthOfItem)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return insets
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return insets.right
+    }
 }
