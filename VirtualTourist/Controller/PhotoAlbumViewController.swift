@@ -29,16 +29,22 @@ class PhotoAlbumViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     
     // MARK: - Lifecycle Functions
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMapView()
         
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.isUserInteractionEnabled = true
+        //
+//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+//        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
+//        tap.cancelsTouchesInView = false
+//        collectionView.addGestureRecognizer(tap)
         
         setupFetchedResultsController()
-//        loadDataFromNetwork(forceRefresh: false)
+        loadDataFromNetwork(forceRefresh: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,7 +73,7 @@ class PhotoAlbumViewController: UIViewController {
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
         let predicate = NSPredicate(format: "pin == %@", self.pin)
         fetchRequest.predicate = predicate
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pin-\(pin.objectID)-photos")
@@ -86,6 +92,7 @@ class PhotoAlbumViewController: UIViewController {
     // if False - will ONLY refresh if there is no data
     fileprivate func loadDataFromNetwork(forceRefresh: Bool = false) {
         print("loadDataFromNetwork called")
+        print(pin.photos!.count)
         if (forceRefresh) {
             // asked to reload new data
             print("loadDataFromNetwork - forceRefresh = true - CALLING API")
@@ -130,22 +137,36 @@ class PhotoAlbumViewController: UIViewController {
         //                }
         //            }
         //        }
+        print("resetPhotos being called")
         if let photos = fetchedResultsController.fetchedObjects {
+            print(photos.count)
             for photo in photos {
+                print(photo.url)
                 removePhoto(photo: photo)
+//                break
             }
         }
-        //        setupFetchedResultsController()
-        loadDataFromNetwork(forceRefresh: true)
+        print("Got here")
+//        collectionView.reloadData()
+//        //        setupFetchedResultsController()
+//        loadDataFromNetwork(forceRefresh: true)
     }
     
     func handlePhotoResults(success: Bool?, error: Error?) {
         print("handlePhotoResults")
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-            self.uiLoadingData(loading:false)
+        if !success! {
+            DispatchQueue.main.async {
+                self.uiLoadingData(loading:false)
+                self.showAlert(message: "Unable to load data - \(error)")
+            }
+            return
+        } else {
+            // data has already been updated by API at this point
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.uiLoadingData(loading:false)
+            }
         }
-        // I'm not sure why I don't need to do anything here
         
     }
     
@@ -156,16 +177,16 @@ class PhotoAlbumViewController: UIViewController {
         self.newCollectionButton.isEnabled = loading
     }
     
-    func setEmptyMessage(_ message: String) {
+    func displayNoPhotosMessage() {
+        let message = "No photos found."
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.collectionView.bounds.size.width, height: self.collectionView.bounds.size.height))
         messageLabel.text = message
         messageLabel.textAlignment = .center;
         messageLabel.sizeToFit()
-        
         self.collectionView.backgroundView = messageLabel;
     }
     
-    func deleteEmptyMessage() {
+    func removeNoPhotosMessage() {
         self.collectionView.backgroundView = nil
     }
     
@@ -176,6 +197,7 @@ class PhotoAlbumViewController: UIViewController {
 extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
         switch type {
         case .insert:
             collectionView.insertItems(at: [newIndexPath!])
@@ -184,11 +206,21 @@ extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
             collectionView.deleteItems(at: [indexPath!])
             break
         default: ()
-//        case .update:
-//            collectionView.reloadItems(at: [indexPath!])
-//        case .move:
-//            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
         }
+//        switch type {
+//        case .insert:
+//            collectionView.insertItems(at: [newIndexPath!])
+//            break
+//        case .delete:
+//            collectionView.deleteItems(at: [indexPath!])
+//            break
+//        default: ()
+//
+////        case .update:
+////            collectionView.reloadItems(at: [indexPath!])
+////        case .move:
+////            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
+//        }
     }
     
 }
@@ -210,16 +242,27 @@ extension PhotoAlbumViewController: MKMapViewDelegate {
     }
 }
 
-extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension PhotoAlbumViewController: UICollectionViewDataSource {
     
     // MARK: Collection View Data Source
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return fetchedResultsController.sections!.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
+        let numberOfItems:Int = fetchedResultsController.sections?[section].numberOfObjects ?? 0
+        
+        print("collectionView = numberOfItemsInSection - \(numberOfItems)")
+        
         if (fetchedResultsController.sections?[section].numberOfObjects ?? 0 == 0) {
-            self.setEmptyMessage("No photos found.")
+            // did it come to here
+            print("It found 0 results")
+            self.displayNoPhotosMessage()
         } else {
-            self.deleteEmptyMessage()
+            print("It found 1 or more results")
+            self.removeNoPhotosMessage()
         }
         
         return fetchedResultsController.sections?[section].numberOfObjects ?? 0
@@ -263,12 +306,15 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
         
     }
     
+}
+
+extension PhotoAlbumViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Image Clicked")
-        let photoToDelete = fetchedResultsController.object(at: indexPath)
-        self.removePhoto(photo: photoToDelete)
+        let photo = fetchedResultsController.object(at: indexPath)
+        self.removePhoto(photo: photo)
     }
-    
 }
 
 extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout {

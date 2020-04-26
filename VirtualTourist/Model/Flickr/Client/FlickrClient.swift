@@ -64,6 +64,7 @@ class FlickrClient: Client {
                 print("searchPhotos - retrieved valid response")
                 let dataController = DataController.getInstance()
                 // for each photo, create a new field and save to pin
+                print("Number of photos found in API - \(response.photos.photo.count)")
                 for photoDTO in response.photos.photo {
                     // convert from PhotoItemResponse to Photo (DataStore)
                     // TODO: Find a way to make this the same object (no DTO and Object separate)
@@ -73,9 +74,9 @@ class FlickrClient: Client {
                     photo.url = photoDTO.generatedFileUrl
                     photo.pin = pin
                     hasAtLeastOneImage = true
+                    try? dataController.viewContext.save()
                 }
                 // save them all in one go
-                try? dataController.viewContext.save()
                 
                 // search photos retrieved - keep in mind Photo information is not full
                 completion(hasAtLeastOneImage, nil)
@@ -83,7 +84,7 @@ class FlickrClient: Client {
                 print("searchPhotos - response errored out")
                 print(error)
                 // we need to figure out how we want to handle this
-                completion(nil, error)
+                completion(false, error)
             }
         }
     }
