@@ -11,6 +11,15 @@ import UIKit
 
 class PhotoCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    
     @IBOutlet weak var imageView: UIImageView!
+    
+    // MARK: - Standard LIfe Cycle
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
     
 }

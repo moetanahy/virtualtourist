@@ -109,10 +109,6 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="DTd-eS-UpB" id="dkE-sY-lPa"/>
-                                    <outlet property="delegate" destination="DTd-eS-UpB" id="cwT-SP-efB"/>
-                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>

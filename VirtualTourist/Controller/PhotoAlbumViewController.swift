@@ -13,7 +13,7 @@ import CoreData
 // MARK: - PhotoAlbumViewController
 
 class PhotoAlbumViewController: UIViewController {
-
+    
     // MARK: - Properties
     // MARK: Variables
     let dataController: DataController = DataController.getInstance()
@@ -33,8 +33,17 @@ class PhotoAlbumViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMapView()
+        
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        
         setupFetchedResultsController()
-        loadDataFromNetwork(forceRefresh: false)
+//        loadDataFromNetwork(forceRefresh: false)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupFetchedResultsController()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -45,16 +54,13 @@ class PhotoAlbumViewController: UIViewController {
     // MARK: - Set Up for the View, Fetching Controller & Getting Data
     
     fileprivate func setupMapView() {
-        
         // set the delegate
         mapView.delegate = self
-        
         // Designate center point.
         let center: CLLocationCoordinate2D = pin!.coordinate
         // Set center point in MapView.
         mapView.setCenter(center, animated: true)
         self.mapView.addAnnotation(pin)
-        
     }
     
     fileprivate func setupFetchedResultsController() {
@@ -64,9 +70,9 @@ class PhotoAlbumViewController: UIViewController {
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pin-\(pin.creationDate!)-photos")
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pin-\(pin.objectID)-photos")
         fetchedResultsController.delegate = self
-
+        
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -101,13 +107,47 @@ class PhotoAlbumViewController: UIViewController {
     
     func removePhoto(photo: Photo) {
         dataController.viewContext.delete(photo)
-        do {
-            try dataController.viewContext.save()
-        } catch {
-            print("Error - Cannot save deleted photo")
-        }
+//        do {
+//            try dataController.viewContext.save()
+//        } catch {
+//            print(error)
+//            print("Error - Cannot remove photo")
+//        }
     }
     
+    // resets photos for this location
+    @IBAction func resetPhotos(_ sender: Any) {
+        // I think this causes a problem as this means I'm deleting from
+        // the values in the set while traversing it
+        //        if let photos = pin.photos {
+        //            for photo in photos  {
+        //                var thisPhoto = photo as! Photo
+        //                dataController.viewContext.delete(thisPhoto)
+        //                do {
+        //                    try dataController.viewContext.save()
+        //                } catch {
+        //                    print("Error saving")
+        //                }
+        //            }
+        //        }
+        if let photos = fetchedResultsController.fetchedObjects {
+            for photo in photos {
+                removePhoto(photo: photo)
+            }
+        }
+        //        setupFetchedResultsController()
+        loadDataFromNetwork(forceRefresh: true)
+    }
+    
+    func handlePhotoResults(success: Bool?, error: Error?) {
+        print("handlePhotoResults")
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+            self.uiLoadingData(loading:false)
+        }
+        // I'm not sure why I don't need to do anything here
+        
+    }
     
     // MARK: - UI Manipulation
     
@@ -116,47 +156,20 @@ class PhotoAlbumViewController: UIViewController {
         self.newCollectionButton.isEnabled = loading
     }
     
-    
-    func handlePhotoResults(success: Bool?, error: Error?) {
-        print("handlePhotoResults")
-        uiLoadingData(loading:false)
-        // I'm not sure why I don't need to do anything here
+    func setEmptyMessage(_ message: String) {
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.collectionView.bounds.size.width, height: self.collectionView.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textAlignment = .center;
+        messageLabel.sizeToFit()
         
-        
+        self.collectionView.backgroundView = messageLabel;
     }
     
-    func displayNoPhotosFound() {
-        
+    func deleteEmptyMessage() {
+        self.collectionView.backgroundView = nil
     }
     
-    // resets photos for this location
-    @IBAction func resetPhotos(_ sender: Any) {
-        // I think this causes a problem as this means I'm deleting from
-        // the values in the set while traversing it
-//        if let photos = pin.photos {
-//            for photo in photos  {
-//                var thisPhoto = photo as! Photo
-//                dataController.viewContext.delete(thisPhoto)
-//                do {
-//                    try dataController.viewContext.save()
-//                } catch {
-//                    print("Error saving")
-//                }
-//            }
-//        }
-        if let photos = fetchedResultsController.fetchedObjects {
-            for photo in photos {
-                dataController.viewContext.delete(photo)
-                do {
-                    try dataController.viewContext.save()
-                } catch {
-                    print("Error saving")
-                }
-            }
-        }
-//        setupFetchedResultsController()
-        loadDataFromNetwork(forceRefresh: true)
-    }
+    
 }
 
 // this is needed for the results controller
@@ -170,52 +183,50 @@ extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
         case .delete:
             collectionView.deleteItems(at: [indexPath!])
             break
-        case .update:
-            collectionView.reloadItems(at: [indexPath!])
-        case .move:
-            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
+        default: ()
+//        case .update:
+//            collectionView.reloadItems(at: [indexPath!])
+//        case .move:
+//            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
         }
     }
     
 }
 
 extension PhotoAlbumViewController: MKMapViewDelegate {
-    
     // Delegate method called when addAnnotation is done.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
         let reuseId = "pin"
-        
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = false
             pinView!.pinTintColor = .red
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        }
-        else {
+        } else {
             pinView!.annotation = annotation
         }
-        
         return pinView
     }
-    
 }
 
 extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
+    
     // MARK: Collection View Data Source
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let photos = self.pin.photos {
-            return photos.count
+        
+        if (fetchedResultsController.sections?[section].numberOfObjects ?? 0 == 0) {
+            self.setEmptyMessage("No photos found.")
+        } else {
+            self.deleteEmptyMessage()
         }
-        return 0
+        
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-       
+        
         let aPhoto = fetchedResultsController.object(at: indexPath)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCollectionCell", for: indexPath) as! PhotoCollectionViewCell
         
@@ -252,9 +263,10 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath:IndexPath) {
-        // an image has been clicked
-        
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Image Clicked")
+        let photoToDelete = fetchedResultsController.object(at: indexPath)
+        self.removePhoto(photo: photoToDelete)
     }
     
 }
