@@ -18,7 +18,7 @@ class PhotoAlbumViewController: UIViewController {
     
     let dataController: DataController = DataController.getInstance()
     
-    var pin: Pin?
+    var pin: Pin!
     
     // MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -28,8 +28,45 @@ class PhotoAlbumViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        organiseMap
+        setupMapView()
         
     }
+    
+    fileprivate func setupMapView() {
+        
+        // set the delegate
+        mapView.delegate = self
+        
+        // Designate center point.
+        let center: CLLocationCoordinate2D = pin!.coordinate
+        // Set center point in MapView.
+        mapView.setCenter(center, animated: true)
+        self.mapView.addAnnotation(pin)
+        
+    }
+    
+}
 
+extension PhotoAlbumViewController: MKMapViewDelegate {
+    
+    // Delegate method called when addAnnotation is done.
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let reuseId = "pin"
+        
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = false
+            pinView!.pinTintColor = .red
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
+    }
+    
 }
