@@ -79,19 +79,37 @@ class PhotoAlbumViewController: UIViewController {
     // if True - will refresh even if there is data
     // if False - will ONLY refresh if there is no data
     fileprivate func loadDataFromNetwork(forceRefresh: Bool = false) {
-        
+        print("loadDataFromNetwork called")
         if (forceRefresh) {
             // asked to reload new data
+            print("loadDataFromNetwork - forceRefresh = true - CALLING API")
             uiLoadingData(loading: true)
             FlickrClient.searchAndSavePhotos(pin: pin, completion: self.handlePhotoResults(success: error:))
         } else if pin.photos!.count == 0 {
             // we don't have any photos, please refresh
+            print("loadDataFromNetwork - forceRefresh = false - count is 0, so CALLING API")
             uiLoadingData(loading: true)
             FlickrClient.searchAndSavePhotos(pin: pin, completion: self.handlePhotoResults(success: error:))
+        } else {
+            // else do nothing, keep data as-is
+            print("loadDataFromNetwork - forceRefresh = false - count > 0, Doing nothing")
         }
-        // else do nothing, keep data as-is
         
     }
+    
+    // MARK: - Data Manipulation
+    
+    func removePhoto(photo: Photo) {
+        dataController.viewContext.delete(photo)
+        do {
+            try dataController.viewContext.save()
+        } catch {
+            print("Error - Cannot save deleted photo")
+        }
+    }
+    
+    
+    // MARK: - UI Manipulation
     
     func uiLoadingData(loading: Bool) {
         // lets the UI know we're loading data
@@ -101,19 +119,9 @@ class PhotoAlbumViewController: UIViewController {
     
     func handlePhotoResults(success: Bool?, error: Error?) {
         print("handlePhotoResults")
-        // do something here
-//        guard let searchPhotoResponse = searchPhotoResponse else {
-//            // there is an error here
-//            // was unable to load photos
-//            print("had some form of issue")
-//            self.displayNoPhotosFound()
-//            showAlert(message: error?.localizedDescription ?? "")
-//            return
-//        }
+        uiLoadingData(loading:false)
+        // I'm not sure why I don't need to do anything here
         
-        
-        
-//        searchPhotoResponse.decide
         
     }
     
@@ -121,6 +129,34 @@ class PhotoAlbumViewController: UIViewController {
         
     }
     
+    // resets photos for this location
+    @IBAction func resetPhotos(_ sender: Any) {
+        // I think this causes a problem as this means I'm deleting from
+        // the values in the set while traversing it
+//        if let photos = pin.photos {
+//            for photo in photos  {
+//                var thisPhoto = photo as! Photo
+//                dataController.viewContext.delete(thisPhoto)
+//                do {
+//                    try dataController.viewContext.save()
+//                } catch {
+//                    print("Error saving")
+//                }
+//            }
+//        }
+        if let photos = fetchedResultsController.fetchedObjects {
+            for photo in photos {
+                dataController.viewContext.delete(photo)
+                do {
+                    try dataController.viewContext.save()
+                } catch {
+                    print("Error saving")
+                }
+            }
+        }
+//        setupFetchedResultsController()
+        loadDataFromNetwork(forceRefresh: true)
+    }
 }
 
 // this is needed for the results controller
@@ -132,7 +168,7 @@ extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
             collectionView.insertItems(at: [newIndexPath!])
             break
         case .delete:
-            collectionView.deleteItems(at: [newIndexPath!])
+            collectionView.deleteItems(at: [indexPath!])
             break
         case .update:
             collectionView.reloadItems(at: [indexPath!])
@@ -204,24 +240,14 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
                     print("no data returned for file")
                     return
                 }
+                
+                DispatchQueue.main.async {
+                    cell.imageView.image = UIImage(data: data)
+                }
                 aPhoto.image = data
-                cell.imageView.image = UIImage(data: data)
                 try? self.dataController.viewContext.save()
             }
-            
-//            getFileData
-            
-            
-//            cell.imageView.image.setImage(with: url, placeholder: UIImage(named: "ImagePlaceholder"), options: nil, progressBlock: nil) { (img, err, cacheType, url) in
-//                if ((err) != nil) {
-//
-//                } else {
-//                    aPhoto.data = img?.pngData()
-//                    try? self.dataController.viewContext.save()
-//                }
-//            }
         }
-        
         return cell
         
     }

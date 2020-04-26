@@ -76,6 +76,9 @@
                                     <constraint firstAttribute="height" constant="41" id="YaI-j0-Z1n"/>
                                 </constraints>
                                 <state key="normal" title="New Collection"/>
+                                <connections>
+                                    <action selector="resetPhotos:" destination="DTd-eS-UpB" eventType="touchUpInside" id="Wm0-Wm-zji"/>
+                                </connections>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="JNu-uW-b0y">
                                 <rect key="frame" x="0.0" y="255" width="414" height="566"/>
