@@ -7,10 +7,12 @@
         <attribute name="creationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="subtitle" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String" defaultValueString="View Album"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="pinLocation" inverseEntity="Photo"/>
     </entity>
     <elements>
         <element name="Photo" positionX="-18" positionY="45" width="128" height="58"/>
-        <element name="Pin" positionX="-278.625" positionY="31.03125" width="128" height="103"/>
+        <element name="Pin" positionX="-278.625" positionY="31.03125" width="128" height="133"/>
     </elements>
 </model>

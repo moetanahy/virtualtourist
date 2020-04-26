@@ -29,12 +29,15 @@ I'll do it in two steps:
    * Swap to using ResultsControllers and Observers to get this loading with less code overhead
 * Using a Repostory Pattern which will accomodate for CoreData & Codable calls
 
+## Check Database
+
+You can find the Database on my local computer at
+
+/Users/moe/Library/Developer/CoreSimulator/Devices/2AC3E393-111B-45D3-9618-698334225705/data/Containers/Data/Application/F4D5FFDE-2872-418F-9E5D-33F585773679/Library/Application Support/
+
+Use DB Database Browser for SQLLite to view the files above and can save
 
 ## Useful code references
 
 * https://medium.com/@calmone/ios-mapkit-in-swift-4-drop-the-pin-at-the-point-of-long-press-2bed878fdf93
 * 
-
-
-
-

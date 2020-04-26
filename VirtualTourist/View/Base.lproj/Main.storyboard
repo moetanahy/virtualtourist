@@ -48,17 +48,17 @@
                     <navigationItem key="navigationItem" id="mzy-9g-2z2"/>
                     <connections>
                         <outlet property="mapView" destination="NuF-eu-PVh" id="89H-lm-WHR"/>
-                        <segue destination="DTd-eS-UpB" kind="show" id="DJT-De-4Bv"/>
+                        <segue destination="DTd-eS-UpB" kind="show" identifier="showPhotoAlbum" id="DJT-De-4Bv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="98.4375"/>
         </scene>
-        <!--Photo Album View Controller-->
+        <!--PhotoAlbumViewController-->
         <scene sceneID="c9I-eq-aZL">
             <objects>
-                <viewController id="DTd-eS-UpB" customClass="PhotoAlbumViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoAlbumViewController" title="PhotoAlbumViewController" id="DTd-eS-UpB" customClass="PhotoAlbumViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="spH-WP-St4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
