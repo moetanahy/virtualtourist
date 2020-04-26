@@ -199,7 +199,7 @@ extension MapViewController: MKMapViewDelegate {
         // Segue - showPhotoAlbum
         let photoAlbumViewController = self.storyboard?.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
         photoAlbumViewController.pin = myPin
-        self.present(photoAlbumViewController, animated: true, completion: nil)
+//        self.present(photoAlbumViewController, animated: true, completion: nil)
         self.navigationController?.pushViewController(photoAlbumViewController, animated: true)
         
     }

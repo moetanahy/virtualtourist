@@ -24,7 +24,7 @@
             </objects>
             <point key="canvasLocation" x="-848" y="100"/>
         </scene>
-        <!--Map View Controller-->
+        <!--Photo Albums-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="MapViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
@@ -45,7 +45,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="mzy-9g-2z2"/>
+                    <navigationItem key="navigationItem" title="Photo Albums" id="mzy-9g-2z2"/>
                     <connections>
                         <outlet property="mapView" destination="NuF-eu-PVh" id="89H-lm-WHR"/>
                         <segue destination="DTd-eS-UpB" kind="show" identifier="showPhotoAlbum" id="DJT-De-4Bv"/>
