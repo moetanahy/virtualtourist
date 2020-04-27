@@ -22,6 +22,8 @@ class MapViewController: UIViewController {
     
     var dataController:DataController = DataController.getInstance()
     
+//    let myLongPress: UILongPressGestureRecognizer!;
+    
     // MARK: - Outlets
     
     @IBOutlet weak var mapView: MKMapView!
@@ -35,6 +37,11 @@ class MapViewController: UIViewController {
         setupMapView()
         loadPins()
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+//        mapView.removeGestureRecognizer(myLongPress)
     }
     
     // -------------------------------------------------------------------------
@@ -54,7 +61,7 @@ class MapViewController: UIViewController {
         mapView.setCenter(center, animated: true)
         
         // Generate long-press UIGestureRecognizer.
-        let myLongPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer()
+        let  myLongPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer()
         myLongPress.addTarget(self, action: #selector(recognizeLongPress(_:)))
         
         // Added UIGestureRecognizer to MapView.

@@ -36,7 +36,15 @@ class PhotoAlbumViewController: UIViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
+        self.view.isUserInteractionEnabled = true
         collectionView.isUserInteractionEnabled = true
+        collectionView.allowsSelection = true
+        
+//        let tap = UITapGestureRecognizer(target: self, action:Selector("dismissKeyboard"))
+//        view.addGestureRecognizer(tap)
+
+//        tap.cancelsTouchesInView = false
+        
         //
 //        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
 //        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
@@ -55,6 +63,11 @@ class PhotoAlbumViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         fetchedResultsController = nil
+    }
+    
+    deinit {
+        mapView.delegate = nil
+        mapView = nil
     }
     
     // MARK: - Set Up for the View, Fetching Controller & Getting Data
@@ -114,12 +127,12 @@ class PhotoAlbumViewController: UIViewController {
     
     func removePhoto(photo: Photo) {
         dataController.viewContext.delete(photo)
-//        do {
-//            try dataController.viewContext.save()
-//        } catch {
-//            print(error)
-//            print("Error - Cannot remove photo")
-//        }
+        do {
+            try dataController.viewContext.save()
+        } catch {
+            print(error)
+            print("Error - Cannot remove photo")
+        }
     }
     
     // resets photos for this location
@@ -197,7 +210,7 @@ class PhotoAlbumViewController: UIViewController {
 extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
+//        print("controller function")
         switch type {
         case .insert:
             collectionView.insertItems(at: [newIndexPath!])
@@ -309,7 +322,15 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
 }
 
 extension PhotoAlbumViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        print("Did Highlight")
+    }
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Image Clicked")
         let photo = fetchedResultsController.object(at: indexPath)
@@ -318,7 +339,7 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
 }
 
 extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout {
-    
+        
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -340,4 +361,5 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout {
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return insets.right
     }
+    
 }
