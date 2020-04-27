@@ -134,12 +134,10 @@ class PhotoAlbumViewController: UIViewController {
             print(photos.count)
             for photo in photos {
                 print(photo.url)
-                dataController.viewContext.performAndWait {
-                    removePhoto(photo: photo)
-                    collectionView.reloadData()
-//                    dataController.viewContext.delete(photo)
+                self.dataController.viewContext.performAndWait {
+                    self.removePhoto(photo: photo)
+                    self.collectionView.reloadData()
                 }
-                
             }
         }
         loadDataFromNetwork(forceRefresh: true)
@@ -239,33 +237,6 @@ extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
         default: ()
         }
     }
-    
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-////        print("controller function")
-//        switch type {
-//        case .insert:
-//            collectionView.insertItems(at: [newIndexPath!])
-//            break
-//        case .delete:
-//            collectionView.deleteItems(at: [indexPath!])
-//            break
-//        default: ()
-//        }
-////        switch type {
-////        case .insert:
-////            collectionView.insertItems(at: [newIndexPath!])
-////            break
-////        case .delete:
-////            collectionView.deleteItems(at: [indexPath!])
-////            break
-////        default: ()
-////
-//////        case .update:
-//////            collectionView.reloadItems(at: [indexPath!])
-//////        case .move:
-//////            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
-////        }
-//    }
     
 }
 
