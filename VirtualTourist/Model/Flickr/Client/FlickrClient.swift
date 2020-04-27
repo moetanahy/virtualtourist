@@ -41,7 +41,7 @@ class FlickrClient: Client {
                 // search for photos given a specific lat and long
                 // Docs - https://www.flickr.com/services/api/flickr.photos.search.htm
                 // API Explorer - https://www.flickr.com/services/api/explore/flickr.photos.search
-                // example url                 https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=0f3eb8495ce8927e7269312105ccba09&lat=30.0517014&lon=31.1966411&format=json&nojsoncallback=1
+                // example url                 https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=0f3eb8495ce8927e7269312105ccba09&lat=30.0517014&lon=31.1966411&format=json&nojsoncallback=1&per_page=10
                 return Endpoints.base + "?method=flickr.photos.search" + Endpoints.apiKeyParam + "&lat=\(lat)&lon=\(lon)&format=json&nojsoncallback=1"
             }
         }

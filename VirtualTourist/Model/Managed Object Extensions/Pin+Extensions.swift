@@ -26,4 +26,14 @@ extension Pin: MKAnnotation {
         return coordinate
     }
     
+    // MARK: Remove photos
+    
+    func removePhotos(context: NSManagedObjectContext) {
+        if let photos = photos {
+            for photo in photos {
+                context.delete(photo as! NSManagedObject)
+            }
+        }
+    }
+    
 }

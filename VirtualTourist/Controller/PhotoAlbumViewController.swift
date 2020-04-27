@@ -29,7 +29,7 @@ class PhotoAlbumViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     
     // MARK: - Lifecycle Functions
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -129,59 +129,142 @@ class PhotoAlbumViewController: UIViewController {
         }
     }
     
+    // trying a million ways to try and get this working
+    // final solution - got it working using a weird statement which gets the correct number of records
+    // https://fangpenlin.com/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue/
+    // https://stackoverflow.com/questions/19199985/invalid-update-invalid-number-of-items-on-uicollectionview/19202953#19202953
     @IBAction func removeAllPhotos() {
+        removeAllPhotosWithLoop()
+//        removeAllPhotosWithBatchDeleteRequestUsingObjectID()
+//        removeAllPhotosWIthBatchDeleteRequestQuery()
+//        removeAllPhotosThroughModel()
+        
+    }
+    
+    func removeAllPhotosWithBatchDeleteRequestUsingObjectID() {
+        
+        if let photos = fetchedResultsController.fetchedObjects {
+            var objectIds:[NSManagedObjectID] = []
+            
+            for photo in photos {
+//                print(photo.objectID)
+                objectIds.append(photo.objectID)
+//                self.collectionView.clear
+//                self.dataController.viewContext.performAndWait {
+//                    self.removePhoto(photo: photo)
+//                }
+            }
+            
+            let delAllReqVar = NSBatchDeleteRequest(objectIDs: objectIds)
+            
+            do {
+                try dataController.viewContext.execute(delAllReqVar)
+            } catch {
+                print(error)
+            }
+        }
+        self.collectionView.reloadData()
+        
+    }
+    
+    func removeAllPhotosWIthBatchDeleteRequestQuery() {
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
+//            let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+            let predicate = NSPredicate(format: "pin == %@", self.pin)
+            fetchRequest.predicate = predicate
+    
+            let delAllReqVar = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            do {
+                try dataController.viewContext.execute(delAllReqVar)
+                try dataController.viewContext.save()
+            } catch {
+                print(error)
+    
+            }
+        
+        }
+    
+    func removeAllPhotosWithFetchRequestIndividual() {
+        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+        let predicate = NSPredicate(format: "pin == %@", self.pin)
+        fetchRequest.predicate = predicate
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do
+        {
+            let results = try dataController.viewContext.fetch(fetchRequest)
+            for managedObject in results
+            {
+                let managedObjectData:NSManagedObject = managedObject as! NSManagedObject
+                dataController.viewContext.delete(managedObjectData)
+            }
+        } catch let error as NSError {
+            print("Detele all data in error : \(error) \(error.userInfo)")
+        }
+    }
+    
+    func removeAllPhotosWithLoop() {
         if let photos = fetchedResultsController.fetchedObjects {
             print(photos.count)
+//            var count:Int = 0
             for photo in photos {
                 print(photo.url)
                 self.dataController.viewContext.performAndWait {
                     self.removePhoto(photo: photo)
-                    self.collectionView.reloadData()
                 }
             }
         }
+        self.collectionView.reloadData()
+        collectionView!.numberOfItems(inSection: 0) //<-- This code is no used, but it will let UICollectionView synchronize number of items, so it will not crash in following code.
         loadDataFromNetwork(forceRefresh: true)
+    }
+    
+    func removeAllPhotosThroughModel() {
+        self.pin.removePhotos(context: dataController.viewContext)
+        self.collectionView.reloadData()
     }
     
     
     // resets photos for this location
-//    @IBAction func resetPhotos(_ sender: Any) {
-//        // I think this causes a problem as this means I'm deleting from
-//        // the values in the set while traversing it
-//        //        if let photos = pin.photos {
-//        //            for photo in photos  {
-//        //                var thisPhoto = photo as! Photo
-//        //                dataController.viewContext.delete(thisPhoto)
-//        //                do {
-//        //                    try dataController.viewContext.save()
-//        //                } catch {
-//        //                    print("Error saving")
-//        //                }
-//        //            }
-//        //        }
-//        print("resetPhotos being called")
-//        if let photos = fetchedResultsController.fetchedObjects {
-//            print(photos.count)
-//            for photo in photos {
-//                print(photo.url)
-////                removePhoto(photo: photo)
-//                dataController.viewContext.delete(photo)
-////                break
-////                collectionView.reloadData()
-//            }
-//            do {
-//                try dataController.viewContext.save()
-//            } catch {
-//                print(error)
-//                print("Error - Cannot remove photo")
-//            }
-//        }
-//        print("End of the clearing issue")
-////        collectionView.reloadData()
-////        collectionView.reloadData()
-////        //        setupFetchedResultsController()
-////        loadDataFromNetwork(forceRefresh: true)
-//    }
+    //    @IBAction func resetPhotos(_ sender: Any) {
+    //        // I think this causes a problem as this means I'm deleting from
+    //        // the values in the set while traversing it
+    //        //        if let photos = pin.photos {
+    //        //            for photo in photos  {
+    //        //                var thisPhoto = photo as! Photo
+    //        //                dataController.viewContext.delete(thisPhoto)
+    //        //                do {
+    //        //                    try dataController.viewContext.save()
+    //        //                } catch {
+    //        //                    print("Error saving")
+    //        //                }
+    //        //            }
+    //        //        }
+    //        print("resetPhotos being called")
+    //        if let photos = fetchedResultsController.fetchedObjects {
+    //            print(photos.count)
+    //            for photo in photos {
+    //                print(photo.url)
+    ////                removePhoto(photo: photo)
+    //                dataController.viewContext.delete(photo)
+    ////                break
+    ////                collectionView.reloadData()
+    //            }
+    //            do {
+    //                try dataController.viewContext.save()
+    //            } catch {
+    //                print(error)
+    //                print("Error - Cannot remove photo")
+    //            }
+    //        }
+    //        print("End of the clearing issue")
+    ////        collectionView.reloadData()
+    ////        collectionView.reloadData()
+    ////        //        setupFetchedResultsController()
+    ////        loadDataFromNetwork(forceRefresh: true)
+    //    }
     
     func handlePhotoResults(success: Bool?, error: Error?) {
         print("handlePhotoResults")
@@ -227,15 +310,28 @@ class PhotoAlbumViewController: UIViewController {
 extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            collectionView.insertItems(at: [newIndexPath!])
-            break
-        case .delete:
-            collectionView.deleteItems(at: [indexPath!])
-            break
-        default: ()
+        
+        DispatchQueue.main.async {
+            switch type {
+            case .insert:
+                print("Insert item into collectionView")
+                self.collectionView.insertItems(at: [newIndexPath!])
+                break
+            case .delete:
+                print("Delete item from collectionView")
+                break
+//            case .update:
+//                print("Update case with \(indexPath)")
+//                self.collectionView.deleteItems(at: [indexPath!])
+//                break
+//            case .move:
+//                print("Update move with \(indexPath)")
+//                break
+            default: ()
+            }
+            
         }
+        
     }
     
 }
@@ -271,7 +367,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         
         print("collectionView = numberOfItemsInSection - \(numberOfItems)")
         
-        if (fetchedResultsController.sections?[section].numberOfObjects ?? 0 == 0) {
+        if (numberOfItems == 0) {
             // did it come to here
             print("It found 0 results")
             self.displayNoPhotosMessage()
@@ -324,7 +420,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
 }
 
 extension PhotoAlbumViewController: UICollectionViewDelegate {
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photo = fetchedResultsController.object(at: indexPath)
         self.removePhoto(photo: photo)
@@ -332,7 +428,7 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
 }
 
 extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout {
-        
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
