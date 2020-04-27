@@ -112,6 +112,7 @@ class PhotoAlbumViewController: UIViewController {
         } else {
             // else do nothing, keep data as-is
             print("loadDataFromNetwork - forceRefresh = false - count > 0, Doing nothing")
+            uiLoadingData(loading: false)
         }
         
     }
@@ -135,10 +136,13 @@ class PhotoAlbumViewController: UIViewController {
                 print(photo.url)
                 dataController.viewContext.performAndWait {
                     removePhoto(photo: photo)
+                    collectionView.reloadData()
+//                    dataController.viewContext.delete(photo)
                 }
+                
             }
         }
-//        loadDataFromNetwork(forceRefresh: true)
+        loadDataFromNetwork(forceRefresh: true)
     }
     
     
@@ -185,7 +189,6 @@ class PhotoAlbumViewController: UIViewController {
         print("handlePhotoResults")
         if !success! {
             DispatchQueue.main.async {
-                self.uiLoadingData(loading:false)
                 self.showAlert(message: "Unable to load data - \(error)")
             }
             return
@@ -193,9 +196,9 @@ class PhotoAlbumViewController: UIViewController {
             // data has already been updated by API at this point
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
-                self.uiLoadingData(loading:false)
             }
         }
+        self.uiLoadingData(loading:false)
         
     }
     
@@ -203,7 +206,7 @@ class PhotoAlbumViewController: UIViewController {
     
     func uiLoadingData(loading: Bool) {
         // lets the UI know we're loading data
-        self.newCollectionButton.isEnabled = loading
+        self.newCollectionButton.isEnabled = !loading
     }
     
     func displayNoPhotosMessage() {

@@ -74,8 +74,8 @@ class FlickrClient: Client {
                     photo.url = photoDTO.generatedFileUrl
                     photo.pin = pin
                     hasAtLeastOneImage = true
-                    try? dataController.viewContext.save()
                 }
+                try? dataController.viewContext.save()
                 // save them all in one go
                 
                 // search photos retrieved - keep in mind Photo information is not full
