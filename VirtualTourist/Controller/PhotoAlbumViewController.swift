@@ -16,7 +16,7 @@ class PhotoAlbumViewController: UIViewController {
     
     // MARK: - Properties
     // MARK: Variables
-    let dataController: DataController = DataController.getInstance()
+    var dataController: DataController!
     var fetchedResultsController:NSFetchedResultsController<Photo>!
     var pin: Pin!
     
@@ -32,24 +32,17 @@ class PhotoAlbumViewController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        dataController = DataController.getInstance()
+        
         setupMapView()
+        
         
         collectionView.dataSource = self
         collectionView.delegate = self
         self.view.isUserInteractionEnabled = true
         collectionView.isUserInteractionEnabled = true
         collectionView.allowsSelection = true
-        
-//        let tap = UITapGestureRecognizer(target: self, action:Selector("dismissKeyboard"))
-//        view.addGestureRecognizer(tap)
-
-//        tap.cancelsTouchesInView = false
-        
-        //
-//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
-//        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
-//        tap.cancelsTouchesInView = false
-//        collectionView.addGestureRecognizer(tap)
         
         setupFetchedResultsController()
         loadDataFromNetwork(forceRefresh: false)
@@ -135,35 +128,58 @@ class PhotoAlbumViewController: UIViewController {
         }
     }
     
-    // resets photos for this location
-    @IBAction func resetPhotos(_ sender: Any) {
-        // I think this causes a problem as this means I'm deleting from
-        // the values in the set while traversing it
-        //        if let photos = pin.photos {
-        //            for photo in photos  {
-        //                var thisPhoto = photo as! Photo
-        //                dataController.viewContext.delete(thisPhoto)
-        //                do {
-        //                    try dataController.viewContext.save()
-        //                } catch {
-        //                    print("Error saving")
-        //                }
-        //            }
-        //        }
-        print("resetPhotos being called")
+    @IBAction func removeAllPhotos() {
         if let photos = fetchedResultsController.fetchedObjects {
             print(photos.count)
             for photo in photos {
                 print(photo.url)
-                removePhoto(photo: photo)
-//                break
+                dataController.viewContext.performAndWait {
+                    removePhoto(photo: photo)
+                }
             }
         }
-        print("Got here")
-//        collectionView.reloadData()
-//        //        setupFetchedResultsController()
 //        loadDataFromNetwork(forceRefresh: true)
     }
+    
+    
+    // resets photos for this location
+//    @IBAction func resetPhotos(_ sender: Any) {
+//        // I think this causes a problem as this means I'm deleting from
+//        // the values in the set while traversing it
+//        //        if let photos = pin.photos {
+//        //            for photo in photos  {
+//        //                var thisPhoto = photo as! Photo
+//        //                dataController.viewContext.delete(thisPhoto)
+//        //                do {
+//        //                    try dataController.viewContext.save()
+//        //                } catch {
+//        //                    print("Error saving")
+//        //                }
+//        //            }
+//        //        }
+//        print("resetPhotos being called")
+//        if let photos = fetchedResultsController.fetchedObjects {
+//            print(photos.count)
+//            for photo in photos {
+//                print(photo.url)
+////                removePhoto(photo: photo)
+//                dataController.viewContext.delete(photo)
+////                break
+////                collectionView.reloadData()
+//            }
+//            do {
+//                try dataController.viewContext.save()
+//            } catch {
+//                print(error)
+//                print("Error - Cannot remove photo")
+//            }
+//        }
+//        print("End of the clearing issue")
+////        collectionView.reloadData()
+////        collectionView.reloadData()
+////        //        setupFetchedResultsController()
+////        loadDataFromNetwork(forceRefresh: true)
+//    }
     
     func handlePhotoResults(success: Bool?, error: Error?) {
         print("handlePhotoResults")
@@ -210,7 +226,6 @@ class PhotoAlbumViewController: UIViewController {
 extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        print("controller function")
         switch type {
         case .insert:
             collectionView.insertItems(at: [newIndexPath!])
@@ -220,6 +235,10 @@ extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
             break
         default: ()
         }
+    }
+    
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+////        print("controller function")
 //        switch type {
 //        case .insert:
 //            collectionView.insertItems(at: [newIndexPath!])
@@ -228,13 +247,22 @@ extension PhotoAlbumViewController:NSFetchedResultsControllerDelegate {
 //            collectionView.deleteItems(at: [indexPath!])
 //            break
 //        default: ()
-//
-////        case .update:
-////            collectionView.reloadItems(at: [indexPath!])
-////        case .move:
-////            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
 //        }
-    }
+////        switch type {
+////        case .insert:
+////            collectionView.insertItems(at: [newIndexPath!])
+////            break
+////        case .delete:
+////            collectionView.deleteItems(at: [indexPath!])
+////            break
+////        default: ()
+////
+//////        case .update:
+//////            collectionView.reloadItems(at: [indexPath!])
+//////        case .move:
+//////            collectionView.moveItem(at: indexPath!, to: newIndexPath!)
+////        }
+//    }
     
 }
 
@@ -323,16 +351,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
 
 extension PhotoAlbumViewController: UICollectionViewDelegate {
 
-    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        print("Did Highlight")
-    }
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Image Clicked")
         let photo = fetchedResultsController.object(at: indexPath)
         self.removePhoto(photo: photo)
     }
