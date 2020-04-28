@@ -424,6 +424,7 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photo = fetchedResultsController.object(at: indexPath)
         self.removePhoto(photo: photo)
+        self.collectionView.reloadData()
     }
 }
 
